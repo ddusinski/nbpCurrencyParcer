@@ -23,8 +23,8 @@ public class NBPquote {
     private String noteDate;
     @JsonProperty("data_publikacji")
     private String publicationDate;
-//    @JsonProperty("pozycja")
-    @JacksonXmlElementWrapper
+    @JsonProperty("pozycja")
+    @JacksonXmlElementWrapper(useWrapping = false)
     private List<NBPrate> rates;
 
 
