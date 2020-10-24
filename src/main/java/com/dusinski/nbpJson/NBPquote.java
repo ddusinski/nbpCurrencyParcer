@@ -1,12 +1,15 @@
 package com.dusinski.nbpJson;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 
+import java.security.Key;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonRootName("tabela_kursow")
@@ -14,20 +17,14 @@ public class NBPquote {
 
     @JsonProperty("numer_tabeli")
     private String table;
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private String currency;
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private String code;
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonProperty("data_notowania")
     private String noteDate;
     @JsonProperty("data_publikacji")
     private String publicationDate;
+
     @JsonProperty("pozycja")
     @JacksonXmlElementWrapper(useWrapping = false)
-    private List<NBPrate> rates;
-
-
+    private final Map<String, NBPrate> rates = new HashMap<>();
 
     public String getTable() {
         return table;
@@ -37,39 +34,20 @@ public class NBPquote {
         this.table = table;
     }
 
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public List<NBPrate> getRates() {
+    public Map<String, NBPrate> getRates() {
         return this.rates;
     }
 
-    public void setRates(List<NBPrate> rates) {
-        this.rates = rates;
+    public void setRates(NBPrate rates) {
+        this.rates.put(rates.getCode(), rates);
     }
 
-    public double calcMediumValue() {
-        float sum=0;
-        for (NBPrate rate : this.rates) {
-            sum +=rate.getMid();
-        }
-        return sum/this.rates.size();
+    public Float getCurrencyBuyCourse(String currencyKey){
+        return this.rates.get(currencyKey).getBuyCourse();
     }
-
-
+    public Float getCurrencySellCourse(String currencyKey){
+        return this.rates.get(currencyKey).getSellCourse();
+    }
     public String getNoteDate() {
         return noteDate;
     }
@@ -86,23 +64,13 @@ public class NBPquote {
         this.publicationDate = publicationDate;
     }
 
-
     @Override
     public String toString() {
         return "NBPquote{" +
                 "table='" + this.table + "'" +
                 ",noteDate='" + this.noteDate + "'" +
                 ",publicationDate='" + this.publicationDate + "'" +
-                ",rates=" + rates +
+                ",rates=" + rates.toString() +
                 "}";
     }
-    public String toString2() {
-        return "NBPquote{" +
-                "table='" + this.table + "'" +
-                ",currency='" + this.currency + "'" +
-                ",code='" + this.code + "'" +
-                ",rates=" + rates +
-                "}";
-    }
-
 }

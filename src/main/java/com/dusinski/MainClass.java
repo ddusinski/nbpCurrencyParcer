@@ -1,10 +1,5 @@
 package com.dusinski;
-
-import com.dusinski.nbpJson.NBPquote;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.time.LocalDate;
 
 /**
  * nbp rate service
@@ -12,20 +7,14 @@ import java.net.URLConnection;
 
 public class MainClass {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args)   {
 
-        String url="https://www.nbp.pl/kursy/xml/c073z070413.xml";
+        String currency = "EUR";
+        LocalDate startDate = LocalDate.of(2013, 1, 28);
+        LocalDate endDate = LocalDate.of(2013, 1, 31);
 
-        URLConnection con = new URL(url).openConnection();
-        con.addRequestProperty("Accept","text/xml");
-
-        XmlMapper xmlMapper = new XmlMapper();
-        NBPquote nbpQuote = xmlMapper.readValue(con.getInputStream(), NBPquote.class);
-        System.out.println(nbpQuote.toString());
+        NBPparser nbpP = new NBPparser(currency, startDate, endDate);
 
     }
-
-
-
 
 }

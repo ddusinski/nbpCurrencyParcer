@@ -2,36 +2,23 @@ package com.dusinski.nbpJson;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
-
-import java.time.LocalDate;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@JsonRootName("pozycja")
 public class NBPrate {
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonProperty("nazwa_waluty")
     private String currencyName;
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonProperty("przelicznik")
     private String multiplier;
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonProperty("kod_waluty")
     private String code;
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonProperty("kurs_kupna")
-    private String buyCourse;
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonDeserialize(using = CommaFloatDeserializer.class)
+    private float buyCourse;
+    @JsonDeserialize(using = CommaFloatDeserializer.class)
     @JsonProperty("kurs_sprzedazy")
-    private String sellCourse;
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private String no;
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private LocalDate effectiveDate;
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private float mid;
-
+    private float sellCourse;
 
     public String getCurrencyName() {
         return currencyName;
@@ -57,47 +44,21 @@ public class NBPrate {
         this.code = code;
     }
 
-    public String getBuyCourse() {
+    public float getBuyCourse() {
         return buyCourse;
     }
 
-    public void setBuyCourse(String buyCourse) {
+    public void setBuyCourse(float buyCourse) {
         this.buyCourse = buyCourse;
     }
 
-    public String getSellCourse() {
+    public float getSellCourse() {
         return sellCourse;
     }
 
-    public void setSellCourse(String sellCourse) {
+    public void setSellCourse(float sellCourse) {
         this.sellCourse = sellCourse;
     }
-
-
-    public String getNo() {
-        return no;
-    }
-
-    public void setNo(String no) {
-        this.no = no;
-    }
-
-    public LocalDate getEffectiveDate() {
-        return effectiveDate;
-    }
-
-    public void setEffectiveDate(LocalDate effectiveDate) {
-        this.effectiveDate = effectiveDate;
-    }
-
-    public float getMid() {
-        return mid;
-    }
-
-    public void setMid(float mid) {
-        this.mid = mid;
-    }
-
 
     @Override
     public String toString() {
@@ -109,13 +70,4 @@ public class NBPrate {
                 ", sellCourse='" + this.sellCourse + "'" +
                 "}";
     }
-
-    public String toString2() {
-        return "NBPrate{" +
-                "no='" + this.no + "'" +
-                ", effectiveDate='" + this.effectiveDate + "'" +
-                ", mid='" + this.mid + "'" +
-                "}";
-    }
-
 }
