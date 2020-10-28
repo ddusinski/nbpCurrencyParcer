@@ -3,8 +3,11 @@ package com.dusinski;
 import com.dusinski.nbpJson.NBPquote;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -27,9 +30,10 @@ public class NBPparser {
         this.endDate = end;
         loadData(start, end);
 
+        DecimalFormat df = new DecimalFormat("#.####");
         System.out.println(this.nbpQuoteList.toString());
-        System.out.println("Medium value buy course of "+currency+" : "+calcMidBuyCourse(currency));
-        System.out.println("Standart deviation of Sell Course of "+currency+" : "+stanDevSellCourse(currency));
+        System.out.println("Medium value buy course of "+currency+" : "+df.format(calcMidBuyCourse(currency)));
+        System.out.println("Standart deviation of Sell Course of "+currency+" : "+df.format(stanDevSellCourse(currency)));
     }
 
     //xml file names are saved in txt file in https://www.nbp.pl/kursy/xml/
@@ -89,16 +93,22 @@ public class NBPparser {
         }
         return sum/this.nbpQuoteList.size();
     }
-
-    public float stanDevSellCourse(String currency) {
-        float mediumValue = calcMidBuyCourse(currency);
-        float quadratEquationSum=0;
+    public float calcMidSellCourse(String currency) {
+        float sum = 0;
 
         for (NBPquote quote : this.nbpQuoteList) {
-            quadratEquationSum+=Math.pow(quote.getCurrencySellCourse(currency)-mediumValue,2);
+            sum+=quote.getCurrencySellCourse(currency);
+        }
+        return sum/this.nbpQuoteList.size();
+    }
+
+    public float stanDevSellCourse(String currency) {
+        float mediumValue = (calcMidSellCourse(currency));
+        float quadratEquationSum=0;
+        for (NBPquote quote : this.nbpQuoteList) {
+            double subtraction =quote.getCurrencySellCourse(currency)-mediumValue;
+            quadratEquationSum+=Math.pow(subtraction,2);
         }
         return (float) Math.sqrt(quadratEquationSum/(this.nbpQuoteList.size()));
     }
-
-
 }

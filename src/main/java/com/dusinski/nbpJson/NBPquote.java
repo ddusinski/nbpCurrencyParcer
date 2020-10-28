@@ -1,15 +1,9 @@
 package com.dusinski.nbpJson;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-
-import java.security.Key;
-import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonRootName("tabela_kursow")
